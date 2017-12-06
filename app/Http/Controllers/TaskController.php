@@ -1,13 +1,12 @@
 <?php
 
-// ItemController.php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Item;
+use App\Task;
+use App\Project;
 
-class ItemController extends Controller
+class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +15,9 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = Item::all();
-        return response()->json($items);
+        $tasks = Task::all()->toArray();
+        
+        return view('task.index', compact('tasks'));
     }
 
     /**
@@ -27,7 +27,7 @@ class ItemController extends Controller
      */
     public function create()
     {
-        //
+        return view('task.create');
     }
 
     /**
@@ -38,12 +38,16 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        $item = new Item([
+        $task = new Task([
+          'project_id'=>$request->get('project_id'),
+          'user_id'=>$request->get('user_id'),
           'name' => $request->get('name'),
-          'price' => $request->get('price')
+          'status' => $request->get('status'),
+          'description' => $request->get('description')
         ]);
-        $item->save();
-        return response()->json('Successfully added');
+
+        $task->save();
+        return redirect('/task');
     }
 
     /**
@@ -54,7 +58,10 @@ class ItemController extends Controller
      */
     public function show($id)
     {
-        //
+        $project = Project::find($id);
+        $tasks = $project->tasks;
+        
+        return view('task.index', compact('tasks'));
     }
 
     /**
@@ -65,8 +72,8 @@ class ItemController extends Controller
      */
     public function edit($id)
     {
-        $item = Item::find($id);
-        return response()->json($item);
+        $task = Task::find($id);
+        return view('task.edit', compact('task','id'));
     }
 
     /**
@@ -78,12 +85,14 @@ class ItemController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $item = Item::find($id);
-        $item->name = $request->get('name');
-        $item->price = $request->get('price');
-        $item->save();
-
-        return response()->json('Successfully Updated');
+        $task = Task::find($id);
+        $task->project_id = $request->get('project_id');
+        $task->user_id = $request->get('user_id');
+        $task->name = $request->get('name');
+        $task->status = $request->get('status');
+        $task->description = $request->get('description');
+        $task->save();
+        return redirect('/task');
     }
 
     /**
@@ -94,9 +103,10 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
-      $item = Item::find($id);
-      $item->delete();
+        $task = Task::find($id);
+        $task->delete();
 
-      return response()->json('Successfully Deleted');
+        return redirect('/task');
     }
 }
+
