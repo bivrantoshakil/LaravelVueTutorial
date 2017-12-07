@@ -58,7 +58,12 @@
         methods: {
             fetchProjects()
             {
-              let uri = 'http://localhost:8000/manage';
+			  let user_id=this.$route.params.id;
+			  let uri='';
+			  if (user_id==null || user_id=='')
+				uri = 'http://localhost:8000/manage';
+			  else
+				uri = `http://localhost:8000/manage/${user_id}`;
               this.axios.get(uri).then((response) => {
                   this.projects = response.data;
               });

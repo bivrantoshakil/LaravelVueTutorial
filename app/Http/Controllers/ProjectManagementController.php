@@ -56,10 +56,9 @@ class ProjectManagementController extends Controller
      */
     public function show($id)
     {
-        $project = Project::find($id);
-        $users = $project->users;
-        
-        return view('user.index', compact('users'));
+		$user = User::find($id);
+        $projects = $user->projects;
+        return response()->json($projects);
     }
 
     /**
@@ -71,7 +70,6 @@ class ProjectManagementController extends Controller
     public function edit($id)
     {
         $project = Project::find($id);
-        // return view('pmanagement.edit', compact('project','id'));
         return response()->json($project);
     }
 
@@ -84,13 +82,12 @@ class ProjectManagementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $user = User::find($request->get('user_id'));
+        $user = User::find($request->get('user_id'));
         $project = Project::find($id);
         $project->name = $request->get('name');
         $project->status = $request->get('status');
-        $project->save();
-        // $user->projects()->save($project);
-        // return redirect('/manage');
+
+        $user->projects()->save($project);
         return response()->json('Success');
     }
 

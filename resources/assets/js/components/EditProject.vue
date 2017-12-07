@@ -13,8 +13,13 @@
             </div>
 
             <div class="form-group">
-                <label name="prject_status">Project Status</label>
+                <label>Project Status</label>
                 <input type="text" class="form-control" v-model="project.status">
+            </div>
+			
+			<div class="form-group">
+                <label>User Id</label>
+                <input type="text" class="form-control" v-model="project.user_id">
             </div>
 
             <div class="form-group">
@@ -43,6 +48,7 @@
               let uri = `http://localhost:8000/manage/${this.$route.params.id}/edit`;
                 this.axios.get(uri).then((response) => {
                     this.project = response.data;
+					console.log(response.data);
                 });
             },
 

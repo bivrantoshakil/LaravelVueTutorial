@@ -15,6 +15,7 @@
                 <td>ID</td>
                 <td>User Name</td>
                 <td>Email</td>
+				<td>Projects</td>
                 <td>Actions</td>
             </tr>
             </thead>
@@ -24,6 +25,7 @@
                     <td>{{ user.id }}</td>
                     <td>{{ user.name }}</td>
                     <td>{{ user.email }}</td>
+					<td><router-link :to="{name: 'DisplayProject', params: { id: user.id }}" class="btn btn-primary">Projects</router-link></td>
                     <td><router-link :to="{name: 'EditUser', params: { id: user.id }}" class="btn btn-primary">Edit</router-link></td>
                     <td><button class="btn btn-danger" v-on:click="deleteUser(user.id)">Delete</button></td>
                 </tr>
