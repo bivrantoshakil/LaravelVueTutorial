@@ -15,3 +15,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::resource('manage', 'ProjectManagementController');
+Route::resource('user', 'UserController');
+Route::resource('task', 'TaskController');

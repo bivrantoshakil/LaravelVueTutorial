@@ -16,8 +16,7 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::all()->toArray();
-        
-        return view('task.index', compact('tasks'));
+        return response()->json($tasks);
     }
 
     /**
@@ -47,7 +46,7 @@ class TaskController extends Controller
         ]);
 
         $task->save();
-        return redirect('/task');
+		return response()->json('Success');
     }
 
     /**
@@ -60,8 +59,7 @@ class TaskController extends Controller
     {
         $project = Project::find($id);
         $tasks = $project->tasks;
-        
-        return view('task.index', compact('tasks'));
+        return response()->json($tasks);;
     }
 
     /**
@@ -73,7 +71,7 @@ class TaskController extends Controller
     public function edit($id)
     {
         $task = Task::find($id);
-        return view('task.edit', compact('task','id'));
+        return response()->json($task);
     }
 
     /**
@@ -92,7 +90,7 @@ class TaskController extends Controller
         $task->status = $request->get('status');
         $task->description = $request->get('description');
         $task->save();
-        return redirect('/task');
+        return response()->json('Success');
     }
 
     /**
@@ -105,8 +103,7 @@ class TaskController extends Controller
     {
         $task = Task::find($id);
         $task->delete();
-
-        return redirect('/task');
+		return response()->json('Success');
     }
 }
 

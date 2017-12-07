@@ -17,8 +17,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all()->toArray();
-        
-        return view('user.index', compact('users'));
+        return response()->json($users);
     }
 
     /**
@@ -28,7 +27,6 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('user.create');
     }
 
     /**
@@ -43,9 +41,8 @@ class UserController extends Controller
           'email'=>$request->get('email'),
           'name' => $request->get('name')
         ]);
-
         $user->save();
-        return redirect('/user');
+		return response()->json('Success');
     }
 
     /**
@@ -56,10 +53,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        $tasks = $user->tasks;
-        
-        return view('task.index', compact('tasks'));
+		$project = Project::find($id);
+        $users = $project->users;
+        return response()->json($users);;
     }
 
     /**
@@ -71,7 +67,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        return view('user.edit', compact('user','id'));
+		return response()->json($user);
     }
 
     /**
@@ -87,7 +83,7 @@ class UserController extends Controller
         $user->email = $request->get('email');
         $user->name = $request->get('name');
         $user->save();
-        return redirect('/user');
+		return response()->json('Success');
     }
 
     /**
@@ -100,8 +96,7 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $user->delete();
-
-        return redirect('/user');
+		return response()->json('Success');
     }
 }
 
