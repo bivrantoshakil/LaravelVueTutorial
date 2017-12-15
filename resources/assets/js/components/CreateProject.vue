@@ -1,34 +1,40 @@
 <template>
   <div>
     <h1>Create A Project</h1>
-    <form v-on:submit.prevent="addProject">
-      <div class="row">
+    <form v-on:submit.prevent="validateForm">
+      
+	  <div class="row">
         <div class="col-md-6">
           <div class="form-group">
             <label>Project Name:</label>
-            <input type="text" class="form-control" v-model="project.name">
+            <input v-validate.initial="'required|alpha_spaces'" name="name" type="text" class="form-control" v-model="project.name">
+			<span v-show="errors.has('name')" class="help is-danger">{{ errors.first('name') }}</span>
           </div>
         </div>
-        </div>
-        <div class="row">
+      </div>
+	  
+      <div class="row">
           <div class="col-md-6">
             <div class="form-group">
               <label>Project Status:</label>
-              <input type="text" class="form-control col-md-6" v-model="project.status" />
+              <input v-validate.initial="'required|alpha_spaces'" name="status" type="text" class="form-control" v-model="project.status" />
+			  <span v-show="errors.has('status')" class="help is-danger">{{ errors.first('status') }}</span>
             </div>
           </div>
-        </div><br />
-        <div class="row">
+      </div>
+	  
+      <div class="row">
           <div class="col-md-6">
             <div class="form-group">
               <label>User ID:</label>
-              <input type="text" class="form-control col-md-6" v-model="project.user_id" />
+              <input v-validate.initial="'required|numeric'" name="user_id" type="text" class="form-control" v-model="project.user_id" />
+			  <span v-show="errors.has('user_id')" class="help is-danger">{{ errors.first('user_id') }}</span>
             </div>
           </div>
-        </div><br />
-        <div class="form-group">
+      </div>
+      <div class="form-group">
           <button class="btn btn-primary">Add Project</button>
-        </div>
+      </div>
     </form>
   </div>
 </template>
@@ -40,12 +46,22 @@
         }
     },
     methods: {
-      addProject(){
-        let uri = 'http://localhost:8000/manage';
-        this.axios.post(uri, this.project).then((response) => {
-          this.$router.push({name: 'DisplayProject'})
-        })
-    }
+		addProject(){
+			let uri = 'http://localhost:8000/manage';
+			this.axios.post(uri, this.project).then((response) => {
+			  this.$router.push({name: 'DisplayProject'})
+			})
+		},
+		validateForm(){
+			this.$validator.validateAll().then((result) => {
+			if (result) {
+			  this.addProject();
+			  return;
+			}
+
+			alert('Correct the errors first!');
+		  });
+		}
   }
 }
 </script>
